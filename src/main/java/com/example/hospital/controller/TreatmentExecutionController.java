@@ -1,5 +1,6 @@
 package com.example.hospital.controller;
 
+import com.example.hospital.dto.TreatmentExecutionRequest;
 import com.example.hospital.entity.TreatmentExecution;
 import com.example.hospital.service.TreatmentExecutionService;
 import org.springframework.web.bind.annotation.*;
@@ -17,8 +18,8 @@ public class TreatmentExecutionController {
     }
 
     @PostMapping
-    public TreatmentExecution create(@RequestBody TreatmentExecution execution) {
-        return service.create(execution);
+    public TreatmentExecution create(@RequestBody TreatmentExecutionRequest req) {
+        return service.create(req);
     }
 
     @GetMapping

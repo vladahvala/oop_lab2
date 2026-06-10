@@ -29,5 +29,9 @@ public class TreatmentExecution {
     @JoinColumn(name = "doctor_id", nullable = true)
     private User doctor;
 
+    @ManyToOne
+    @JoinColumn(name = "executor_id", nullable = false)
+    private User executor;
+
     private LocalDateTime executedAt = LocalDateTime.now();
 }
