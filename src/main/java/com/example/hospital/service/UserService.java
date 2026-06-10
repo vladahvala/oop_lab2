@@ -1,7 +1,9 @@
 package com.example.hospital.service;
 
 import com.example.hospital.entity.User;
+import com.example.hospital.entity.Role;
 import com.example.hospital.repository.UserRepository;
+import com.example.hospital.security.SecurityUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,6 +18,11 @@ public class UserService {
     }
 
     public User create(User user) {
+
+        if (user.getRole() == null) {
+            user.setRole(Role.PATIENT);
+        }
+
         return repository.save(user);
     }
 
