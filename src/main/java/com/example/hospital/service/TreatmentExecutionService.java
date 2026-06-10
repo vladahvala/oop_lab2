@@ -34,13 +34,13 @@ public class TreatmentExecutionService {
         Treatment treatment = treatmentRepository.findById(req.treatmentId)
                 .orElseThrow(() -> new RuntimeException("Treatment not found"));
 
+        if (executor.getRole() == Role.PATIENT) {
+            throw new RuntimeException("Patient cannot execute treatments");
+        }
+
         if (executor.getRole() == Role.NURSE &&
                 treatment.getType().equalsIgnoreCase("SURGERY")) {
             throw new RuntimeException("Nurse cannot perform surgery");
-        }
-
-        if (executor.getRole() == Role.PATIENT) {
-            throw new RuntimeException("Patient cannot execute treatments");
         }
 
         TreatmentExecution execution = new TreatmentExecution();

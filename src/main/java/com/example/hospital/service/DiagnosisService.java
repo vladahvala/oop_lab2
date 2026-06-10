@@ -1,9 +1,8 @@
 package com.example.hospital.service;
 
-import com.example.hospital.entity.Diagnosis;
-import com.example.hospital.entity.User;
-import com.example.hospital.repository.DiagnosisRepository;
-import com.example.hospital.repository.UserRepository;
+import com.example.hospital.dto.DiagnosisRequest;
+import com.example.hospital.entity.*;
+import com.example.hospital.repository.*;
 import com.example.hospital.security.SecurityUtils;
 import org.springframework.stereotype.Service;
 
@@ -14,21 +13,34 @@ public class DiagnosisService {
 
     private final DiagnosisRepository repository;
     private final UserRepository userRepository;
+    private final PatientRepository patientRepository;
 
     public DiagnosisService(DiagnosisRepository repository,
-            UserRepository userRepository) {
+            UserRepository userRepository,
+            PatientRepository patientRepository) {
         this.repository = repository;
         this.userRepository = userRepository;
+        this.patientRepository = patientRepository;
     }
 
-    public Diagnosis create(Diagnosis diagnosis) {
+    public Diagnosis create(DiagnosisRequest req) {
 
         String username = SecurityUtils.getCurrentUsername();
 
         User doctor = userRepository.findByUsername(username)
                 .orElseThrow(() -> new RuntimeException("Doctor not found"));
 
+        if (doctor.getRole() != Role.DOCTOR) {
+            throw new RuntimeException("Only doctor can create diagnosis");
+        }
+
+        Patient patient = patientRepository.findById(req.patientId)
+                .orElseThrow(() -> new RuntimeException("Patient not found"));
+
+        Diagnosis diagnosis = new Diagnosis();
         diagnosis.setDoctor(doctor);
+        diagnosis.setPatient(patient);
+        diagnosis.setDescription(req.description);
 
         return repository.save(diagnosis);
     }
