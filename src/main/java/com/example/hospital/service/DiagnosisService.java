@@ -45,6 +45,16 @@ public class DiagnosisService {
         return repository.save(diagnosis);
     }
 
+    public Diagnosis markAsFinal(Long diagnosisId) {
+
+        Diagnosis diagnosis = repository.findById(diagnosisId)
+                .orElseThrow(() -> new RuntimeException("Diagnosis not found"));
+
+        diagnosis.setFinalDiagnosis(true);
+
+        return repository.save(diagnosis);
+    }
+
     public List<Diagnosis> getAll() {
         return repository.findAll();
     }

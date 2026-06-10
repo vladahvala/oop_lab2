@@ -22,6 +22,11 @@ public class DiagnosisController {
         return service.create(req);
     }
 
+    @PutMapping("/{id}/final")
+    public Diagnosis makeFinal(@PathVariable Long id) {
+        return service.markAsFinal(id);
+    }
+
     @GetMapping
     public List<Diagnosis> getAll() {
         return service.getAll();

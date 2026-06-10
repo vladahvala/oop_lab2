@@ -43,6 +43,16 @@ public class PatientService {
         return repository.save(patient);
     }
 
+    public Patient discharge(Long patientId) {
+
+        Patient patient = repository.findById(patientId)
+                .orElseThrow(() -> new RuntimeException("Patient not found"));
+
+        patient.setStatus(PatientStatus.DISCHARGED);
+
+        return repository.save(patient);
+    }
+
     public List<Patient> getAll() {
         return repository.findAll();
     }

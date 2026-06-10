@@ -26,4 +26,9 @@ public class PatientController {
     public List<Patient> getAll() {
         return service.getAll();
     }
+
+    @PutMapping("/{id}/discharge")
+    public Patient discharge(@PathVariable Long id) {
+        return service.discharge(id);
+    }
 }
