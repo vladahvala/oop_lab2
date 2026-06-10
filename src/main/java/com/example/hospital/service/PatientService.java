@@ -1,6 +1,8 @@
 package com.example.hospital.service;
 
+import com.example.hospital.dto.PatientRequest;
 import com.example.hospital.entity.Patient;
+import com.example.hospital.entity.PatientStatus;
 import com.example.hospital.entity.User;
 import com.example.hospital.entity.Role;
 import com.example.hospital.repository.PatientRepository;
@@ -22,7 +24,7 @@ public class PatientService {
         this.userRepository = userRepository;
     }
 
-    public Patient create(Patient patient) {
+    public Patient create(PatientRequest req) {
 
         String username = SecurityUtils.getCurrentUsername();
 
@@ -32,6 +34,11 @@ public class PatientService {
         if (creator.getRole() != Role.DOCTOR) {
             throw new RuntimeException("Only doctor can create patient");
         }
+
+        Patient patient = new Patient();
+        patient.setFullName(req.fullName);
+        patient.setBirthDate(req.birthDate);
+        patient.setStatus(PatientStatus.ADMITTED);
 
         return repository.save(patient);
     }
