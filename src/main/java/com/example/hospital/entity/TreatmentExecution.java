@@ -1,0 +1,33 @@
+package com.example.hospital.entity;
+
+import jakarta.persistence.*;
+import lombok.*;
+
+import java.time.LocalDateTime;
+
+@Entity
+@Table(name = "treatment_executions")
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+public class TreatmentExecution {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @ManyToOne
+    @JoinColumn(name = "treatment_id")
+    private Treatment treatment;
+
+    @ManyToOne
+    @JoinColumn(name = "nurse_id", nullable = true)
+    private User nurse;
+
+    @ManyToOne
+    @JoinColumn(name = "doctor_id", nullable = true)
+    private User doctor;
+
+    private LocalDateTime executedAt = LocalDateTime.now();
+}
