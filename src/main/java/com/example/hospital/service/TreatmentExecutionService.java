@@ -3,7 +3,9 @@ package com.example.hospital.service;
 import com.example.hospital.dto.TreatmentExecutionRequest;
 import com.example.hospital.entity.*;
 import com.example.hospital.repository.*;
-import com.example.hospital.security.SecurityUtils;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -24,22 +26,21 @@ public class TreatmentExecutionService {
         this.userRepository = userRepository;
     }
 
+    @PreAuthorize("hasAnyRole('DOCTOR','NURSE')")
     public TreatmentExecution create(TreatmentExecutionRequest req) {
-
-        String username = SecurityUtils.getCurrentUsername();
-
-        User executor = userRepository.findByUsername(username)
-                .orElseThrow(() -> new RuntimeException("User not found"));
 
         Treatment treatment = treatmentRepository.findById(req.treatmentId)
                 .orElseThrow(() -> new RuntimeException("Treatment not found"));
 
-        if (executor.getRole() == Role.PATIENT) {
-            throw new RuntimeException("Patient cannot execute treatments");
-        }
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
-        if (executor.getRole() == Role.NURSE &&
-                treatment.getType().equalsIgnoreCase("SURGERY")) {
+        User executor = userRepository.findByUsername(auth.getName())
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        boolean isNurse = auth.getAuthorities().stream()
+                .anyMatch(a -> a.getAuthority().equals("ROLE_NURSE"));
+
+        if (treatment.getType() == TreatmentType.SURGERY && isNurse) {
             throw new RuntimeException("Nurse cannot perform surgery");
         }
 

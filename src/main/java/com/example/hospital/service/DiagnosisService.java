@@ -4,6 +4,8 @@ import com.example.hospital.dto.DiagnosisRequest;
 import com.example.hospital.entity.*;
 import com.example.hospital.repository.*;
 import com.example.hospital.security.SecurityUtils;
+
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -23,6 +25,7 @@ public class DiagnosisService {
         this.patientRepository = patientRepository;
     }
 
+    @PreAuthorize("hasRole('DOCTOR')")
     public Diagnosis create(DiagnosisRequest req) {
 
         String username = SecurityUtils.getCurrentUsername();

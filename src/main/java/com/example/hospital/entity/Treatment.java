@@ -19,7 +19,8 @@ public class Treatment {
     @JoinColumn(name = "diagnosis_id")
     private Diagnosis diagnosis;
 
-    private String type;
+    @Enumerated(EnumType.STRING)
+    private TreatmentType type;
     // medicine / procedure / surgery
 
     private String description;

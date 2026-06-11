@@ -8,6 +8,8 @@ import com.example.hospital.entity.Role;
 import com.example.hospital.repository.PatientRepository;
 import com.example.hospital.repository.UserRepository;
 import com.example.hospital.security.SecurityUtils;
+
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -24,16 +26,13 @@ public class PatientService {
         this.userRepository = userRepository;
     }
 
+    @PreAuthorize("hasRole('DOCTOR')")
     public Patient create(PatientRequest req) {
 
         String username = SecurityUtils.getCurrentUsername();
 
         User creator = userRepository.findByUsername(username)
                 .orElseThrow(() -> new RuntimeException("User not found"));
-
-        if (creator.getRole() != Role.DOCTOR) {
-            throw new RuntimeException("Only doctor can create patient");
-        }
 
         Patient patient = new Patient();
         patient.setFullName(req.fullName);
