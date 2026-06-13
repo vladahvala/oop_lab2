@@ -1,0 +1,47 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1
+      author: you
+      changes:
+        - createTable:
+            tableName: diagnoses
+            columns:
+              - column:
+                  name: id
+                  type: BIGSERIAL
+                  constraints:
+                    primaryKey: true
+
+              - column:
+                  name: patient_id
+                  type: bigint
+
+              - column:
+                  name: doctor_id
+                  type: bigint
+
+              - column:
+                  name: description
+                  type: varchar(500)
+
+              - column:
+                  name: final_diagnosis
+                  type: boolean
+
+              - column:
+                  name: created_at
+                  type: timestamp
+
+        - addForeignKeyConstraint:
+            baseTableName: diagnoses
+            baseColumnNames: patient_id
+            referencedTableName: patients
+            referencedColumnNames: id
+            constraintName: fk_diagnoses_patient
+
+        - addForeignKeyConstraint:
+            baseTableName: diagnoses
+            baseColumnNames: doctor_id
+            referencedTableName: users
+            referencedColumnNames: id
+            constraintName: fk_diagnoses_doctor

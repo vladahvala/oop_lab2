@@ -1,0 +1,39 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1
+      author: you
+      changes:
+        - createTable:
+            tableName: treatment_executions
+            columns:
+              - column:
+                  name: id
+                  type: BIGSERIAL
+                  constraints:
+                    primaryKey: true
+
+              - column:
+                  name: treatment_id
+                  type: bigint
+
+              - column:
+                  name: executor_id
+                  type: bigint
+
+              - column:
+                  name: executed_at
+                  type: timestamp
+
+        - addForeignKeyConstraint:
+            baseTableName: treatment_executions
+            baseColumnNames: treatment_id
+            referencedTableName: treatments
+            referencedColumnNames: id
+            constraintName: fk_exec_treatment
+
+        - addForeignKeyConstraint:
+            baseTableName: treatment_executions
+            baseColumnNames: executor_id
+            referencedTableName: users
+            referencedColumnNames: id
+            constraintName: fk_exec_user

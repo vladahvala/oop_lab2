@@ -1,0 +1,25 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1
+      author: you
+      changes:
+        - createTable:
+            tableName: users
+            columns:
+              - column:
+                  name: id
+                  type: BIGSERIAL
+                  constraints:
+                    primaryKey: true
+
+              - column:
+                  name: username
+                  type: varchar(100)
+
+              - column:
+                  name: full_name
+                  type: varchar(200)
+
+              - column:
+                  name: role
+                  type: varchar(20)

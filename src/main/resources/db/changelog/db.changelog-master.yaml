@@ -1,14 +1,15 @@
 databaseChangeLog:
-  - changeSet:
-      id: 1
-      author: you
-      changes:
-        - createTable:
-            tableName: test
-            columns:
-              - column:
-                  name: id
-                  type: int
-                  autoIncrement: true
-                  constraints:
-                    primaryKey: true
+  - include:
+      file: db/changelog/001-users.yaml
+
+  - include:
+      file: db/changelog/002-patients.yaml
+
+  - include:
+      file: db/changelog/003-diagnoses.yaml
+
+  - include:
+      file: db/changelog/004-treatments.yaml
+
+  - include:
+      file: db/changelog/005-executions.yaml

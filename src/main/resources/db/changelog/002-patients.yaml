@@ -1,0 +1,36 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1
+      author: you
+      changes:
+        - createTable:
+            tableName: patients
+            columns:
+              - column:
+                  name: id
+                  type: BIGSERIAL
+                  constraints:
+                    primaryKey: true
+
+              - column:
+                  name: full_name
+                  type: varchar(200)
+
+              - column:
+                  name: birth_date
+                  type: date
+
+              - column:
+                  name: status
+                  type: varchar(20)
+
+              - column:
+                  name: user_id
+                  type: bigint
+
+        - addForeignKeyConstraint:
+            baseTableName: patients
+            baseColumnNames: user_id
+            referencedTableName: users
+            referencedColumnNames: id
+            constraintName: fk_patients_user
