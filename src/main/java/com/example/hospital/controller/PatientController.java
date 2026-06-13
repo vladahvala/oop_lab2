@@ -33,4 +33,9 @@ public class PatientController {
             @RequestBody DischargeRequest req) {
         return service.discharge(id, req);
     }
+
+    @GetMapping("/{id}")
+    public Patient getById(@PathVariable Long id) {
+        return service.getById(id);
+    }
 }
