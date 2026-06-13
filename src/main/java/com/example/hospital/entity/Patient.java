@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "patients")
@@ -20,6 +21,12 @@ public class Patient {
     private String fullName;
 
     private LocalDate birthDate;
+
+    private Boolean discharged = false;
+
+    private LocalDateTime dischargedAt;
+
+    private String finalDiagnosisText;
 
     @OneToOne
     @JoinColumn(name = "user_id")

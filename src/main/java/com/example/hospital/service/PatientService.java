@@ -1,5 +1,6 @@
 package com.example.hospital.service;
 
+import com.example.hospital.dto.DischargeRequest;
 import com.example.hospital.dto.PatientRequest;
 import com.example.hospital.entity.Patient;
 import com.example.hospital.entity.PatientStatus;
@@ -12,6 +13,7 @@ import com.example.hospital.security.SecurityUtils;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -42,7 +44,8 @@ public class PatientService {
         return repository.save(patient);
     }
 
-    public Patient discharge(Long patientId) {
+    @PreAuthorize("hasRole('DOCTOR')")
+    public Patient discharge(Long patientId, DischargeRequest req) {
 
         Patient patient = repository.findById(patientId)
                 .orElseThrow(() -> new RuntimeException("Patient not found"));
@@ -55,4 +58,5 @@ public class PatientService {
     public List<Patient> getAll() {
         return repository.findAll();
     }
+
 }

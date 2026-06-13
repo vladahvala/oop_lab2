@@ -1,5 +1,6 @@
 package com.example.hospital.controller;
 
+import com.example.hospital.dto.DischargeRequest;
 import com.example.hospital.dto.PatientRequest;
 import com.example.hospital.entity.Patient;
 import com.example.hospital.service.PatientService;
@@ -28,7 +29,8 @@ public class PatientController {
     }
 
     @PutMapping("/{id}/discharge")
-    public Patient discharge(@PathVariable Long id) {
-        return service.discharge(id);
+    public Patient discharge(@PathVariable Long id,
+            @RequestBody DischargeRequest req) {
+        return service.discharge(id, req);
     }
 }
