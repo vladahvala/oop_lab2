@@ -2,6 +2,7 @@ package com.example.hospital.controller;
 
 import com.example.hospital.dto.DiagnosisRequest;
 import com.example.hospital.entity.Diagnosis;
+import com.example.hospital.security.SecurityUtils;
 import com.example.hospital.service.DiagnosisService;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,5 +31,11 @@ public class DiagnosisController {
     @GetMapping
     public List<Diagnosis> getAll() {
         return service.getAll();
+    }
+
+    @GetMapping("/my")
+    public List<Diagnosis> getMy() {
+        String username = SecurityUtils.getCurrentUsername();
+        return service.getByPatient(username);
     }
 }

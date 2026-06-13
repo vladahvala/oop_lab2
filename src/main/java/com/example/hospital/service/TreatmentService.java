@@ -1,5 +1,6 @@
 package com.example.hospital.service;
 
+import com.example.hospital.dto.TreatmentDTO;
 import com.example.hospital.dto.TreatmentRequest;
 import com.example.hospital.entity.*;
 import com.example.hospital.repository.*;
@@ -36,7 +37,28 @@ public class TreatmentService {
         return repository.save(treatment);
     }
 
-    public List<Treatment> getAll() {
-        return repository.findAll();
+    @PreAuthorize("hasAnyRole('DOCTOR','NURSE')")
+    public List<TreatmentDTO> getAll() {
+        return repository.findAll().stream().map(t -> {
+            TreatmentDTO dto = new TreatmentDTO();
+            dto.id = t.getId();
+            dto.type = t.getType() != null ? t.getType().name() : "MEDICINE";
+            dto.description = t.getDescription();
+            dto.status = t.getStatus() != null ? t.getStatus().name() : "PENDING";
+            return dto;
+        }).toList();
+    }
+
+    public List<TreatmentDTO> getByPatient(String username) {
+        return repository.findByDiagnosis_Patient_User_Username(username)
+                .stream()
+                .map(t -> {
+                    TreatmentDTO dto = new TreatmentDTO();
+                    dto.id = t.getId();
+                    dto.type = t.getType().name();
+                    dto.description = t.getDescription();
+                    dto.status = t.getStatus().name();
+                    return dto;
+                }).toList();
     }
 }

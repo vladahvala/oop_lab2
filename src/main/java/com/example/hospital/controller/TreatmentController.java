@@ -1,8 +1,11 @@
 package com.example.hospital.controller;
 
+import com.example.hospital.dto.TreatmentDTO;
 import com.example.hospital.dto.TreatmentRequest;
 import com.example.hospital.entity.Treatment;
 import com.example.hospital.service.TreatmentService;
+
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -23,7 +26,17 @@ public class TreatmentController {
     }
 
     @GetMapping
-    public List<Treatment> getAll() {
+    public List<TreatmentDTO> getAll() {
         return service.getAll();
+    }
+
+    @GetMapping("/debug")
+    public String debug(Authentication auth) {
+        return auth.getAuthorities().toString();
+    }
+
+    @GetMapping("/my")
+    public List<TreatmentDTO> my(Authentication auth) {
+        return service.getByPatient(auth.getName());
     }
 }

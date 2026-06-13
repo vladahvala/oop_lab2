@@ -34,19 +34,31 @@ public class TreatmentExecutionService {
 
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
-        User executor = userRepository.findByUsername(auth.getName())
+        User user = userRepository.findByUsername(auth.getName())
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
         boolean isNurse = auth.getAuthorities().stream()
                 .anyMatch(a -> a.getAuthority().equals("ROLE_NURSE"));
 
-        if (treatment.getType() == TreatmentType.SURGERY && isNurse) {
+        boolean isDoctor = auth.getAuthorities().stream()
+                .anyMatch(a -> a.getAuthority().equals("ROLE_DOCTOR"));
+
+        // 🚫 RULE: nurse cannot do surgery
+        if (isNurse && treatment.getType() == TreatmentType.SURGERY) {
             throw new RuntimeException("Nurse cannot perform surgery");
         }
 
         TreatmentExecution execution = new TreatmentExecution();
         execution.setTreatment(treatment);
-        execution.setExecutor(executor);
+        execution.setExecutor(user);
+
+        if (isNurse) {
+            execution.setNurse(user);
+        }
+
+        if (isDoctor) {
+            execution.setDoctor(user);
+        }
 
         return repository.save(execution);
     }

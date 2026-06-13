@@ -2,6 +2,7 @@ package com.example.hospital.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -21,6 +22,31 @@ public class SecurityConfig {
                 http
                                 .csrf(csrf -> csrf.disable())
                                 .authorizeHttpRequests(auth -> auth
+
+                                                // тільки лікар створює призначення
+                                                .requestMatchers(HttpMethod.POST, "/treatments").hasRole("DOCTOR")
+
+                                                // лікар + медсестра можуть дивитись ВСІ
+                                                .requestMatchers(HttpMethod.GET, "/treatments")
+                                                .hasAnyRole("DOCTOR", "NURSE")
+
+                                                // пацієнт дивиться тільки своє
+                                                .requestMatchers("/treatments/my").hasRole("PATIENT")
+
+                                                .requestMatchers(HttpMethod.POST, "/diagnoses").hasRole("DOCTOR")
+
+                                                .requestMatchers(HttpMethod.GET, "/diagnoses/my").hasRole("PATIENT")
+
+                                                .requestMatchers(HttpMethod.GET, "/diagnoses")
+                                                .hasAnyRole("DOCTOR", "NURSE")
+
+                                                .requestMatchers(HttpMethod.POST, "/executions")
+                                                .hasAnyRole("DOCTOR", "NURSE")
+
+                                                .requestMatchers(HttpMethod.GET, "/executions")
+                                                .hasAnyRole("DOCTOR", "NURSE")
+
+                                                // fallback
                                                 .anyRequest().authenticated())
                                 .httpBasic();
 

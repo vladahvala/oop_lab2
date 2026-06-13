@@ -3,6 +3,8 @@ package com.example.hospital.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name = "treatments")
 @Getter
@@ -17,6 +19,7 @@ public class Treatment {
 
     @ManyToOne
     @JoinColumn(name = "diagnosis_id")
+    @JsonIgnore
     private Diagnosis diagnosis;
 
     @Enumerated(EnumType.STRING)

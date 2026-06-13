@@ -61,4 +61,8 @@ public class DiagnosisService {
     public List<Diagnosis> getAll() {
         return repository.findAll();
     }
+
+    public List<Diagnosis> getByPatient(String username) {
+        return repository.findByPatient_User_Username(username);
+    }
 }
